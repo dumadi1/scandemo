@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Instascan</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+    <script type="text/javascript" src="instascan.min.js" ></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <video id="preview"></video>
+    <script>
+       
+        let scanner = new Instascan.Scanner(
+            {
+                video: document.getElementById('preview')
+            }
+        );
+        scanner.addListener('scan', function(content) {
+           
+//             $.ajax({
+// type: "POST",
+// url: "https://api.demo-save-a-life.com/api/valid-medicine",
+// data: {
+// locationKey:"here",
+// barcode: "12345678"
+// },
+// dataType : 'jsonp',
+// success: function(output){
+// let res=output;
+// alert(output);
+// }
+// });
+
+$.ajax({
+    url:'https://api.demo-save-a-life.com/valid-medicine',
+    type:'POST',
+    data:
+    {
+      locationKey: "Any String Value for Location",
+      barcode: "12345678"
+    },
+    dataType : 'jsonp',
+    success: function(output) {
+
+      var outputArr = JSON.parse(output);
+
+      console.log(outputArr);
+  }
+  });
+        });
+        Instascan.Camera.getCameras().then(cameras => 
+        {
+            if(cameras.length > 0){
+                scanner.start(cameras[0]);
+            } else {
+                console.error("Please enable Camera!");
+            }
+        });
+    </script>
+
+ </body>
+</html>
+</html>
